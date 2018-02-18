@@ -20,7 +20,7 @@ docker service create --name=XXXXX --replicas=1 --network=my_network -p=8089:808
 
 Here’s a quick rundown of the arguments:
 
-–name: Assigns a logical name to our service. This is also the name other services will use when addressing our service within the cluster. So if you had a another service that would like to call the accountservice, that service would just do a GET to http://accountservice:8089/api/bolt/getUsers
+–name: Assigns a logical name to our service. This is also the name other services will use when addressing our service within the cluster. So if you had a another service that would like to call the accountservice, that service would just do a GET to http://name:8089/api/bolt/getUsers
 –replicas: The number of instances of our service we want. If we’d have a multi-node Docker Swarm cluster the swarm engine would automatically distribute the instances across the nodes.
 –network: Here we tell our service to attach itself to the overlay network we just created.
 -p: Maps [internal port]:[external port]. Here we used 6767:6767 but if we’d created it using 6767:80 then we would access the service from port 80 when calling externally. Note that this is the mechanism that makes our service reachable from outside the cluster. Normally, you shouldn’t expose your services directly to the outside world. Instead, you’d be using an EDGE-server (e.g. a reverse proxy) that would have routing rules and security setup so external consumers wouldn’t be able to reach your services except in the way you’ve intended them to.
