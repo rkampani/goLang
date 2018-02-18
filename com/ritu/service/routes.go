@@ -55,4 +55,26 @@ var routes = Routes{
 		"/api/removeUser/{id}", // Route pattern
 		controller.DeleteUser,
 	},
+	Route{
+
+		"GetBoltUsers",       // Name
+		"GET",                // HTTP method
+		"/api/bolt/getUsers", // Route pattern
+		controller.GetBoltUsers,
+	},
+
+	Route{
+
+		"GetBoltUser", // Name
+		"GET",         // HTTP method
+		"/api/bolt/getUser/{id}", // Route pattern
+		controller.GetBoltUser,
+	},
+	Route{
+
+		"SaveOrUpdateBoltUser", // Name
+		"POST",                 // HTTP method
+		"/api/bolt/saveUser",   // Route pattern
+		controller.SaveOrUpdateBoltUser,
+	},
 }

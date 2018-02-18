@@ -11,12 +11,14 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/rituK/com/ritu/modal"
+
+	"github.com/rituK/com/ritu/utils"
 )
 
 var tmp []modal.Person
 
 func GetUsers(w http.ResponseWriter, req *http.Request) {
-	logTracingPrint("GetUsers --- starts")
+	utils.LogTracingPrint("GetUsers --- starts")
 
 	initialize()
 
@@ -29,9 +31,10 @@ func GetUsers(w http.ResponseWriter, req *http.Request) {
 		fmt.Println("error:", err)
 	}
 
-	setHttpResponseHeader(w)
+	SetHttpResponseHeader(w)
 	w.Write(jsonBytes)
-	logTracingPrint("GetUsers --- ends")
+
+	utils.LogTracingPrint("GetUsers --- ends")
 }
 
 func UpdateUser(w http.ResponseWriter, req *http.Request) {
@@ -39,7 +42,7 @@ func UpdateUser(w http.ResponseWriter, req *http.Request) {
 	// Decode the json request
 	var test modal.Person
 	json.NewDecoder(req.Body).Decode(&test)
-	logTracingPrint("updateUser --- starts")
+	utils.LogTracingPrint("updateUser --- starts")
 
 	// find the person to update
 	temp1, _err := findPerson(strconv.Itoa(test.ID))
@@ -58,11 +61,12 @@ func UpdateUser(w http.ResponseWriter, req *http.Request) {
 	}
 	GetUsers(w, req)
 
-	logTracingPrint("updateUser --- ends")
+	utils.LogTracingPrint("updateUser --- ends")
 }
 
 func InsertUser(w http.ResponseWriter, req *http.Request) {
-	logTracingPrint("InsertUser --- starts")
+
+	utils.LogTracingPrint("InsertUser --- starts")
 
 	var newUser modal.Person
 	json.NewDecoder(req.Body).Decode(&newUser)
@@ -70,12 +74,12 @@ func InsertUser(w http.ResponseWriter, req *http.Request) {
 
 	tmp = append(tmp, newUser)
 	GetUsers(w, req)
-	logTracingPrint("Insert User --- ends")
+	utils.LogTracingPrint("Insert User --- ends")
 }
 
 func DeleteUser(w http.ResponseWriter, req *http.Request) {
 
-	logTracingPrint("DeleteUser --- starts")
+	utils.LogTracingPrint("DeleteUser --- starts")
 	params := mux.Vars(req)
 	id := params["id"]
 	index, _error := findPersonIndexfromSlice(id)
@@ -85,12 +89,12 @@ func DeleteUser(w http.ResponseWriter, req *http.Request) {
 	}
 	tmp = append(tmp[:index], tmp[index+1:]...)
 	GetUsers(w, req)
-	logTracingPrint("DeleteUser --- ends")
+	utils.LogTracingPrint("DeleteUser --- ends")
 }
 
 func GetUser(w http.ResponseWriter, req *http.Request) {
 
-	logTracingPrint("GetUser---- starts")
+	utils.LogTracingPrint("GetUser---- starts")
 	params := mux.Vars(req)
 	id := params["id"]
 	temp1, _err := findPerson(id)
@@ -101,9 +105,9 @@ func GetUser(w http.ResponseWriter, req *http.Request) {
 		fmt.Println("error:", err)
 	}
 
-	setHttpResponseHeader(w)
+	SetHttpResponseHeader(w)
 	w.Write(jsonBytes)
-	logTracingPrint("getUser......ends")
+	utils.LogTracingPrint("getUser......ends")
 }
 
 func findPersonIndexfromSlice(id string) (int, error) {
@@ -130,12 +134,7 @@ func findPerson(id string) (*modal.Person, error) {
 	return nil, errors.New("Not Found")
 }
 
-func logTracingPrint(str string) {
-	fmt.Println("***********************************", str)
-
-}
-
-func setHttpResponseHeader(w http.ResponseWriter) {
+func SetHttpResponseHeader(w http.ResponseWriter) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
